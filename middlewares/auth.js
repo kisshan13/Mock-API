@@ -31,7 +31,6 @@ export function auth(req, res, next) {
     catch (e) {
         res.json({
             success: false,
-            message: ckey.JWT_SECRET,
             error: 'Auth token is not valid'
         })
     }
