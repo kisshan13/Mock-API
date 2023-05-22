@@ -45,6 +45,38 @@ export async function addUser({ name, email, password }) {
     }
 }
 
+export async function addData({ id, info }) {
+    try {
+
+        const data = await prisma.data.upsert({
+            where: {
+                userId: id
+            },
+
+            update: {
+                data: info
+            },
+
+            create: {
+                data: info,
+                userId: id
+            }
+        })
+
+        return {
+            success: true,
+            data: data
+        }
+    }
+
+    catch (e) {
+        return {
+            success: false,
+            error: 'Internal server error'
+        }
+    }
+}
+
 export async function createSession({ email, id, name }) {
     try {
         const refreshToken = jwt.sign({
