@@ -1,6 +1,6 @@
 import ckey from 'ckey'
 import jwt from 'jsonwebtoken'
-import { createAuthToken } from '../prisma/db.js'
+import { createAuthToken } from '../prisma/controllers/sessions.js'
 
 /**
  * 
@@ -23,12 +23,8 @@ export async function auth(req, res, next) {
             authBearerToken,
             ckey.JWT_SECRET)
 
-        console.log(isValid)
-
         res.userId = isValid.id
         res.perms = isValid.perms
-
-        console.log([res.userId, res.perms])
 
         next()
     }
@@ -57,6 +53,6 @@ export async function auth(req, res, next) {
         res.perms = token.perms
 
         next()
-
     }
 }
+

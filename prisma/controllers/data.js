@@ -1,9 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-import { hash } from '../lib/utils.js'
-import jwt from 'jsonwebtoken'
-import ck from 'ckey'
-
-export const prisma = new PrismaClient()
+import { prisma } from "../db.js"
 
 export async function addData({ id, info }) {
     try {
