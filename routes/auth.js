@@ -29,5 +29,4 @@ authRouter.post('/signup', (req, res) => {
         email: email,
         password: password
     })
-
 })
