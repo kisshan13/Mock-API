@@ -29,6 +29,7 @@ export function auth(req, res, next) {
     }
 
     catch (e) {
+        
         res.json({
             success: false,
             error: 'Auth token is not valid'
