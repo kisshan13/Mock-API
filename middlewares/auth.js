@@ -29,10 +29,14 @@ export function auth(req, res, next) {
     }
 
     catch (e) {
-        
-        res.json({
-            success: false,
-            error: 'Auth token is not valid'
-        })
+
+        const cookie = req.cookies.refresh_token
+
+        if (!cookie) {
+            res.json({
+                success: false,
+                error: 'Auth token is not valid'
+            })
+        }
     }
 }

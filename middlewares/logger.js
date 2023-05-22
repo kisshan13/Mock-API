@@ -16,9 +16,7 @@ export function logger(req, res, next) {
     // Getting the url only
     let url = originalUrl.split('?')[0]
 
-    console.log(`
-    [${chalk.green(method)}] : ${chalk.yellow(url)}
-    `)
+    console.log(`[${chalk.green(method)}] : ${chalk.yellow(url)}`)
 
     next()
 }
