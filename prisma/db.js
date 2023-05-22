@@ -47,7 +47,6 @@ export async function addUser({ name, email, password }) {
 
 export async function addData({ id, info }) {
     try {
-
         const data = await prisma.data.upsert({
             where: {
                 userId: id
@@ -89,7 +88,9 @@ export async function createSession({ email, id, name }) {
 
         await prisma.session.create({
             data: {
-                id: id,
+                name: name,
+                email: email,
+                userId: id,
                 refresh_token: refreshToken
             }
         })
@@ -97,6 +98,7 @@ export async function createSession({ email, id, name }) {
         const token = jwt.sign({
             email: email,
             id: id,
+            perms: 'user',
             name: name
         }, ck.JWT_SECRET, {
             expiresIn: 60 * 20
@@ -109,13 +111,53 @@ export async function createSession({ email, id, name }) {
                 refresh_token: refreshToken
             }
         }
-
     }
 
     catch (e) {
         return {
             success: false,
             error: 'Session creation error'
+        }
+    }
+}
+
+export async function createAuthToken(refresh_token) {
+    try {
+        jwt.decode(refresh_token, ck.JWT_SECRET)
+
+        const getSession = await prisma.session.findFirst({
+            where: {
+                refresh_token: refresh_token
+            }
+        })
+
+        if (!getSession) {
+            return {
+                success: false,
+                error: "You've been logged out."
+            }
+        }
+
+        const token = jwt.sign({
+            email: getSession.email,
+            id: getSession.userId,
+            name: getSession.name,
+            perms: 'user'
+        }, ck.JWT_SECRET, {
+            expiresIn: 60 * 20
+        })
+
+        return {
+            token: token,
+            id: getSession.userId,
+            perms: 'user'
+        }
+    }
+
+    catch (e) {
+        return {
+            success: false,
+            error: "You've been logged out."
         }
     }
 }

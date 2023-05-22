@@ -7,7 +7,6 @@ import { logger } from "./middlewares/logger.js";
 import { auth } from "./middlewares/auth.js";
 
 import { authRouter } from './routes/auth.js'
-import { refresh } from "./routes/refresh.js";
 
 const app = express()
 
@@ -19,13 +18,12 @@ app.use(logger)
 app.use(auth)
 
 app.use('/auth', authRouter)
-app.use('/refresh', refresh)
 
 app.get('/', (req, res) => {
     res.send({
-        cookie: req.cookies,
         id: res.userId,
-        perms: res.perms
+        perms: res.perms,
+        token: res.token,
     })
 })
 

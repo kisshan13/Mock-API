@@ -8,7 +8,7 @@ authRouter.post('/signup', async (req, res) => {
     if (res.perms === 'user') {
         return res.status(403).json({
             success: false,
-            erorr: 'Already signed up.'
+            erorr: 'Already a user'
         })
     }
 

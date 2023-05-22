@@ -1,5 +1,6 @@
 import ckey from 'ckey'
 import jwt from 'jsonwebtoken'
+import { createAuthToken } from '../prisma/db.js'
 
 /**
  * 
@@ -7,12 +8,12 @@ import jwt from 'jsonwebtoken'
  * @param {import("express").Response} res 
  * @param {import("express").NextFunction} next 
  */
-export function auth(req, res, next) {
+export async function auth(req, res, next) {
     if (!req.headers.authorization) {
-        res.json({
+        return res.status(403).json({
             success: false,
             error: 'Auth header missing'
-        }).sendStatus(403)
+        })
     }
 
     const authBearerToken = req.headers.authorization.split(' ')[1]
@@ -22,8 +23,12 @@ export function auth(req, res, next) {
             authBearerToken,
             ckey.JWT_SECRET)
 
-        res.userId = isValid.userId
+        console.log(isValid)
+
+        res.userId = isValid.id
         res.perms = isValid.perms
+
+        console.log([res.userId, res.perms])
 
         next()
     }
@@ -32,11 +37,26 @@ export function auth(req, res, next) {
 
         const cookie = req.cookies.refresh_token
 
+        console.log(cookie)
+
         if (!cookie) {
-            res.json({
+            return res.json({
                 success: false,
                 error: 'Auth token is not valid'
             })
         }
+
+        const token = await createAuthToken(cookie)
+
+        if (token.success === false) {
+            return res.status(403).json(token)
+        }
+
+        res.token = token.token
+        res.userId = token.id
+        res.perms = token.perms
+
+        next()
+
     }
 }
