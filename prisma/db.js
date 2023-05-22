@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { hash } from '../lib/utils'
+import { hash } from '../lib/utils.js'
 import jwt from 'jsonwebtoken'
 import ck from 'ckey'
 

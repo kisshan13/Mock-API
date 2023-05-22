@@ -1,14 +1,15 @@
 import { Router } from "express";
+import { addUser } from "../prisma/db.js";
 
 export const authRouter = Router()
 
-authRouter.post('/signup', (req, res) => {
+authRouter.post('/signup', async (req, res) => {
 
     if (res.perms === 'user') {
-        res.json({
+        return res.status(403).json({
             success: false,
             erorr: 'Already signed up.'
-        }).sendStatus(403)
+        })
     }
 
     let {
@@ -18,15 +19,17 @@ authRouter.post('/signup', (req, res) => {
     } = req.body
 
     if (!(name && email && password)) {
-        res.json({
+        return res.status(403).json({
             success: false,
             error: 'Missing required fields.'
-        }).sendStatus(403)
+        })
     }
 
-    res.send({
-        name: name,
-        email: email,
-        password: password
-    })
+    const user = await addUser({ email: email, name: name, password: password })
+
+    if (user.error) {
+        return res.status(500).json(user)
+    }
+
+    return res.status(200).json(user)
 })
