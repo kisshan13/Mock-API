@@ -31,8 +31,8 @@ model Session {
 }
 
 model Data {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
   data   String
-  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
-  userId String @db.ObjectId
+  user   User?   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId String? @unique @db.ObjectId
 }

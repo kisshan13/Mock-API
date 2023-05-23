@@ -7,6 +7,7 @@ import { logger } from "./middlewares/logger.js";
 import { auth } from "./middlewares/auth.js";
 
 import { authRouter } from './routes/auth.js'
+import { dataRouter } from "./routes/data.js";
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use(logger)
 app.use(auth)
 
 app.use('/auth', authRouter)
+app.use('/data', dataRouter)
 
 app.get('/', (req, res) => {
     res.send({

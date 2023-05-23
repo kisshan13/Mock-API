@@ -3,12 +3,12 @@ import { prisma } from "../db.js"
 export async function addData({ id, info }) {
     try {
         const data = await prisma.data.upsert({
-            where: {
-                userId: id
-            },
-
             update: {
                 data: info
+            },
+            
+            where:{
+                userId: id
             },
 
             create: {
@@ -26,7 +26,7 @@ export async function addData({ id, info }) {
     catch (e) {
         return {
             success: false,
-            error: 'Internal server error'
+            error: e.message
         }
     }
 }

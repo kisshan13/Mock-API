@@ -56,3 +56,25 @@ export async function auth(req, res, next) {
     }
 }
 
+
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @param {Object} Options 
+ * @param {boolean} Options.user 
+ */
+export async function userAuth(req, res, next) {
+    if (res.perms === 'user') {
+        next()
+    }
+
+    else {
+        return res.status(403).json({
+            success: false,
+            error: 'Not authorised.'
+        })
+    }
+}
+

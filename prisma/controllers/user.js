@@ -44,6 +44,11 @@ export async function addUser({ name, email, password }) {
 
 export async function validateUser({ email, password }) {
     try {
+        prisma.user.upsert({
+            where: {
+                
+            }
+        })
         const user = await prisma.user.findFirst({
             where: {
                 email: email
