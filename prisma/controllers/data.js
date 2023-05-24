@@ -6,8 +6,8 @@ export async function addData({ id, info }) {
             update: {
                 data: info
             },
-            
-            where:{
+
+            where: {
                 userId: id
             },
 
@@ -20,6 +20,28 @@ export async function addData({ id, info }) {
         return {
             success: true,
             data: data
+        }
+    }
+
+    catch (e) {
+        return {
+            success: false,
+            error: e.message
+        }
+    }
+}
+
+export async function getData({ id }) {
+    try {
+        const data = await prisma.data.findFirst({
+            where: {
+                userId: id
+            }
+        })
+
+        return {
+            success: true,
+            data: data,
         }
     }
 

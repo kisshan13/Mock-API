@@ -36,6 +36,12 @@ authRouter.post('/signup', async (req, res) => {
 
 authRouter.post('/signin', async (req, res) => {
 
+    console.log([
+        res.token,
+        res.userId,
+        res.perms
+    ])
+
     if (res.perms === 'user') {
         return res.status(403).json({
             success: false,

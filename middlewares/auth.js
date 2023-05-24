@@ -22,6 +22,7 @@ export async function auth(req, res, next) {
         const isValid = jwt.verify(
             authBearerToken,
             ckey.JWT_SECRET)
+        console.log(isValid)
 
         res.userId = isValid.id
         res.perms = isValid.perms
@@ -38,7 +39,7 @@ export async function auth(req, res, next) {
         if (!cookie) {
             return res.json({
                 success: false,
-                error: 'Auth token is not valid'
+                error: 'Missing cookie, signin again.'
             })
         }
 
@@ -48,14 +49,14 @@ export async function auth(req, res, next) {
             return res.status(403).json(token)
         }
 
-        res.token = token.token
-        res.userId = token.id
-        res.perms = token.perms
-
-        next()
+        return res.status(200).json({
+            success: false,
+            data: {
+                token: token.token
+            }
+        })
     }
 }
-
 
 /**
  * 
